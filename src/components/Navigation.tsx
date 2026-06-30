@@ -75,19 +75,21 @@ export default function Navigation({ user, isAdmin }: { user: User, isAdmin?: bo
           <div className="flex items-center gap-3">
             {user ? (
               <div className="bg-slate-100/60 dark:bg-slate-800/60 border border-slate-200/25 dark:border-slate-700/25 rounded-full py-1 pl-1 pr-3.5 flex items-center gap-3">
-                <img 
-                  src={user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=E5E5EA&color=1C1C1E`} 
-                  alt="Avatar" 
-                  className="w-8 h-8 rounded-full object-cover shadow-sm border border-black/5 dark:border-white/5" 
-                />
-                <div className="flex flex-col text-left">
-                  <span className="text-[13px] font-semibold text-[#1C1C1E] dark:text-white leading-tight tracking-apple">
-                    {user.displayName?.split(' ')[0]}
-                  </span>
-                  <span className="text-[10px] text-[#8E8E93] leading-none mt-0.5">
-                    {user.email?.split('@')[0]}
-                  </span>
-                </div>
+                <Link to="/settings" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                  <img 
+                    src={user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=E5E5EA&color=1C1C1E`} 
+                    alt="Avatar" 
+                    className="w-8 h-8 rounded-full object-cover shadow-sm border border-black/5 dark:border-white/5" 
+                  />
+                  <div className="flex flex-col text-left">
+                    <span className="text-[13px] font-semibold text-[#1C1C1E] dark:text-white leading-tight tracking-apple">
+                      {user.displayName?.split(' ')[0]}
+                    </span>
+                    <span className="text-[10px] text-[#8E8E93] leading-none mt-0.5">
+                      {user.email?.split('@')[0]}
+                    </span>
+                  </div>
+                </Link>
                 <button
                   onClick={logout}
                   className="p-1.5 text-[#8E8E93] hover:text-[#FF3B30] dark:hover:text-[#FF453A] transition-colors ml-1"
