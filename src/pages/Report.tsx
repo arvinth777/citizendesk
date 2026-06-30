@@ -442,7 +442,7 @@ export default function Report({ user }: { user: User }) {
                 <motion.button
                   whileTap={!isSubmitting ? { scale: prefersReducedMotion ? 1 : 0.98 } : {}}
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={!fileState || !description || isSubmitting || locState === 'loading' || loadingMuni}
                   className="w-full py-4 bg-[#007AFF] hover:bg-[#0A84FF] text-white text-[17px] font-semibold rounded-[20px] shadow-[0_8px_20px_rgba(0,122,255,0.25)] transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (

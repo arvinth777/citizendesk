@@ -7,6 +7,10 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, collection, query, where, getDocs, Timestamp, doc, setDoc, deleteDoc } from "firebase/firestore";
 import fs from "fs";
 import multer from "multer";
+import { initializeApp as initializeAdminApp, applicationDefault } from "firebase-admin/app";
+import { getStorage as getAdminStorage } from "firebase-admin/storage";
+import sharp from "sharp";
+import compression from "compression";
 import { processReportLogic } from "./src/lib/reportProcessor.js";
 
 dotenv.config();
@@ -29,6 +33,13 @@ const appFirebase = initializeApp(firebaseConfig, "server-app");
 const db = firebaseConfig.firestoreDatabaseId
   ? getFirestore(appFirebase, firebaseConfig.firestoreDatabaseId)
   : getFirestore(appFirebase);
+
+// Initialize Firebase Admin for Storage uploads
+initializeAdminApp({
+  credential: applicationDefault(),
+  storageBucket: firebaseConfig.storageBucket
+});
+const bucket = getAdminStorage().bucket();
 
 
 
@@ -153,9 +164,24 @@ Return ONLY valid JSON in this exact format, no markdown:
       let mimeType = null;
       
       if (req.file) {
-         photoUrl = `/uploads/${req.file.filename}`;
          localFilePath = req.file.path;
          mimeType = req.file.mimetype;
+
+         // Fix Ephemeral Storage & EXIF Privacy
+         console.log(`[Process Report] Stripping EXIF and uploading to Firebase Storage...`);
+         const strippedBuffer = await sharp(req.file.path).toBuffer();
+         fs.writeFileSync(req.file.path, strippedBuffer);
+
+         const destPath = `reports/${req.file.filename}`;
+         await bucket.upload(req.file.path, {
+           destination: destPath,
+           metadata: { contentType: mimeType }
+         });
+         
+         const fileRef = bucket.file(destPath);
+         await fileRef.makePublic();
+         photoUrl = fileRef.publicUrl();
+         console.log(`[Process Report] Uploaded successfully to ${photoUrl}`);
       }
 
       const result = await processReportLogic(db as any, ai as any, { 
@@ -174,6 +200,15 @@ Return ONLY valid JSON in this exact format, no markdown:
     } catch (error) {
       console.error("process-report error:", error);
       res.status(500).json({ error: String(error) });
+    } finally {
+      // Ensure the ephemeral local file is always cleaned up, even on failure
+      if (req.file && fs.existsSync(req.file.path)) {
+        try {
+          fs.unlinkSync(req.file.path);
+        } catch (e) {
+          console.error("Failed to delete temp file:", e);
+        }
+      }
     }
   });
 
@@ -363,6 +398,8 @@ Return ONLY valid JSON in this exact format, no markdown:
     }
   });
 
+  app.use(compression());
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
@@ -372,8 +409,9 @@ Return ONLY valid JSON in this exact format, no markdown:
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
+    app.use(express.static(distPath, { maxAge: '1y', index: false }));
     app.get("*", (req, res) => {
+      res.setHeader("Cache-Control", "no-cache");
       res.sendFile(path.join(distPath, "index.html"));
     });
   }

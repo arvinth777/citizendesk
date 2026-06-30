@@ -7,10 +7,7 @@ WORKDIR /usr/src/app
 # Copy application dependency manifests to the container image.
 COPY package*.json ./
 
-# Set the environment variable to production
-ENV NODE_ENV=production
-
-# Install production dependencies.
+# Install all dependencies (including devDependencies needed for build).
 RUN npm install
 
 # Copy local code to the container image.
@@ -18,6 +15,9 @@ COPY . ./
 
 # Build the Vite frontend and the Express backend
 RUN npm run build
+
+# Set the environment variable to production for runtime
+ENV NODE_ENV=production
 
 # Run the web service on container startup.
 CMD [ "npm", "start" ]

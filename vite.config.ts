@@ -61,30 +61,8 @@ export default defineConfig(() => {
       },
     },
     build: {
-      rollupOptions: {
-        output: {
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
-                return 'vendor-react';
-              }
-              if (id.includes('firebase')) {
-                return 'vendor-firebase';
-              }
-              if (id.includes('@vis.gl/react-google-maps')) {
-                return 'vendor-maps';
-              }
-              if (id.includes('lucide-react') || id.includes('motion') || id.includes('framer-motion')) {
-                return 'vendor-ui';
-              }
-              if (id.includes('@deck.gl')) {
-                return 'vendor-deckgl';
-              }
-              return 'vendor-utils';
-            }
-          }
-        }
-      }
+      // Letting Vite handle default chunking avoids module execution order bugs
+      chunkSizeWarningLimit: 1000,
     },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
