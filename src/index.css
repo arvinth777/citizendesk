@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", ui-sans-serif, system-ui, sans-serif;
+
+  /* Apple blue accent */
+  --color-primary: #007AFF;
+  --color-primary-foreground: #ffffff;
+
+  --color-civic-amber: #d97706;
+  --color-civic-amber-light: #fef3c7;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  @apply bg-[#F2F2F7] text-[#1C1C1E] dark:bg-[#000000] dark:text-[#F2F2F7] transition-colors;
+}
+
+/* Apple-style filled button */
+.btn-apple-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  background: #007AFF;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+.btn-apple-primary:hover:not(:disabled) {
+  opacity: 0.88;
+}
+.btn-apple-primary:active:not(:disabled) {
+  transform: scale(0.98);
+  opacity: 0.8;
+}
+.btn-apple-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Apple-style grouped form row */
+.apple-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: #fff;
+  border: none;
+  font-size: 1rem;
+  font-family: var(--font-sans);
+  color: #1C1C1E;
+  outline: none;
+  -webkit-appearance: none;
+}
+.apple-input::placeholder {
+  color: #8E8E93;
+}
+
+/* Apple card */
+.apple-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.dark .apple-card {
+  background: #1C1C1E;
+}
+
+/* Navbar glassmorphism */
+.nav-glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 0.5px solid rgba(0,0,0,0.12);
+}
+.dark .nav-glass {
+  background: rgba(28,28,30,0.72);
+  border-bottom: 0.5px solid rgba(255,255,255,0.08);
+}
+
+@layer utilities {
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+  .tracking-apple {
+    letter-spacing: -0.02em;
+  }
+}

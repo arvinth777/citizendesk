@@ -1,0 +1,26 @@
+{
+  "name": "CitizenDesk — Hyperlocal Civic Reports",
+  "short_name": "CitizenDesk",
+  "description": "Report and track civic issues in your neighbourhood using AI.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0d9488",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "social"],
+  "screenshots": []
+}
