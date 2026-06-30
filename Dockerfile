@@ -13,6 +13,10 @@ RUN npm install
 # Copy local code to the container image.
 COPY . ./
 
+# Accept build arguments from Cloud Build
+ARG VITE_GOOGLE_MAPS_API_KEY
+ENV VITE_GOOGLE_MAPS_API_KEY=$VITE_GOOGLE_MAPS_API_KEY
+
 # Build the Vite frontend and the Express backend
 RUN npm run build
 
