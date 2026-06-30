@@ -6,7 +6,7 @@ import CivicBadge from "./CivicBadge";
 import ReportActivityLog from "./ReportActivityLog";
 import Lightbox from "./Lightbox";
 import { motion, AnimatePresence } from "motion/react";
-import html2canvas from "html2canvas";
+import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
 
 type ReportData = {
@@ -54,20 +54,22 @@ export default function ReportDetailView({
     setIsExporting(true);
     try {
       const element = printRef.current;
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
+      
+      const width = element.offsetWidth;
+      const height = element.scrollHeight;
+
+      const imgData = await toPng(element, {
+        pixelRatio: 2,
         backgroundColor: document.documentElement.classList.contains('dark') ? '#0f172a' : '#ffffff'
       });
       
-      const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'px',
-        format: [canvas.width, canvas.height]
+        format: [width, height]
       });
       
-      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+      pdf.addImage(imgData, 'PNG', 0, 0, width, height);
       pdf.save(`Citizen-Desk-Report-${selectedReport.id.substring(0, 8)}.pdf`);
     } catch (err) {
       console.error("Failed to export PDF", err);
