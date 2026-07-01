@@ -5,9 +5,9 @@ type Theme = 'light' | 'dark' | 'system';
 export function useTheme() {
   const [theme, setThemeState] = useState<Theme>(() => {
     try {
-      return (localStorage.getItem('theme') as Theme) || 'system';
+      return (localStorage.getItem('theme') as Theme) || 'light';
     } catch {
-      return 'system';
+      return 'light';
     }
   });
 

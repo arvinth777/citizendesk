@@ -67,7 +67,7 @@ export default function Admin() {
   const [importStatus, setImportStatus] = useState<"idle" | "importing" | "success" | "error">("idle");
   const [geoData, setGeoData] = useState<any>(null);
 
-  const MAP_API_KEY = (import.meta as any).env.VITE_GOOGLE_MAPS_API_KEY || "";
+  const MAP_API_KEY = (window as any).ENV?.VITE_GOOGLE_MAPS_API_KEY || (import.meta as any).env.VITE_GOOGLE_MAPS_API_KEY || "";
 
   const fetchShapefiles = async () => {
     setLoading(true);

@@ -156,7 +156,7 @@ export default function MapPage({ user }: { user: User }) {
 
 
   const defaultCenter = reports.length > 0 ? { lat: reports[0].lat, lng: reports[0].lng } : { lat: 12.9716, lng: 77.5946 };
-  const MAP_API_KEY = (import.meta as any).env.VITE_GOOGLE_MAPS_API_KEY || "";
+  const MAP_API_KEY = (window as any).ENV?.VITE_GOOGLE_MAPS_API_KEY || (import.meta as any).env.VITE_GOOGLE_MAPS_API_KEY || "";
 
   const validReports = filteredReports.filter(r => typeof r.lat === 'number' && typeof r.lng === 'number' && !isNaN(r.lat) && !isNaN(r.lng));
 

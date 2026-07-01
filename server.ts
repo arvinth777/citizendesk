@@ -412,7 +412,13 @@ Return ONLY valid JSON in this exact format, no markdown:
     app.use(express.static(distPath, { maxAge: '1y', index: false }));
     app.get("*", (req, res) => {
       res.setHeader("Cache-Control", "no-cache");
-      res.sendFile(path.join(distPath, "index.html"));
+      let html = fs.readFileSync(path.join(distPath, "index.html"), "utf8");
+      
+      // Inject runtime environment variables for the frontend
+      const envScript = `<script>window.ENV = { VITE_GOOGLE_MAPS_API_KEY: "${process.env.VITE_GOOGLE_MAPS_API_KEY || ''}" };</script>`;
+      html = html.replace("</head>", `${envScript}</head>`);
+      
+      res.send(html);
     });
   }
 
