@@ -23,10 +23,12 @@ export default function Navigation({ user, isAdmin }: { user: User, isAdmin?: bo
     return () => unsubscribe();
   }, [user]);
 
+  const MAP_API_KEY = (window as any).ENV?.VITE_GOOGLE_MAPS_API_KEY || (import.meta as any).env.VITE_GOOGLE_MAPS_API_KEY || "";
+
   const links = [
     { name: t("Home"), path: "/", id: "tour-nav-home", icon: Home },
     { name: t("Report"), path: "/report", id: "tour-nav-report", icon: FileText },
-    { name: t("Map"), path: "/map", id: "tour-nav-map", icon: MapPin },
+    ...(MAP_API_KEY ? [{ name: t("Map"), path: "/map", id: "tour-nav-map", icon: MapPin }] : []),
     { name: t("Stats"), path: "/dashboard", id: "tour-nav-dashboard", icon: BarChart2 },
     { name: t("Mine"), path: "/my-reports", id: "tour-nav-mine", icon: ClipboardList },
   ];
