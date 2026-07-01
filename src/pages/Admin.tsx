@@ -165,7 +165,7 @@ export default function Admin() {
         </p>
       </div>
 
-      <div className={clsx("grid grid-cols-1 gap-6 h-[calc(100vh-200px)]", MAP_API_KEY && "lg:grid-cols-2")}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-200px)]">
         {/* Left Column: UI */}
         <div className="bg-white dark:bg-slate-900 rounded-[32px] shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col h-full overflow-hidden">
           <div className="p-6 sm:p-8 border-b border-slate-200 dark:border-slate-800 shrink-0">
@@ -295,8 +295,14 @@ export default function Admin() {
         </div>
 
         {/* Right Column: Map Preview */}
-        {MAP_API_KEY && (
-          <div className="bg-white dark:bg-slate-900 rounded-[32px] shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden relative min-h-[400px]">
+        <div className="bg-white dark:bg-slate-900 rounded-[32px] shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden relative min-h-[400px]">
+          {!MAP_API_KEY ? (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900 text-slate-500 p-8 text-center z-10">
+              <Navigation className="w-12 h-12 mb-4 text-slate-300 dark:text-slate-700" />
+              <h2 className="text-xl font-semibold text-slate-700 dark:text-slate-300 mb-2">Google Maps API Key Missing</h2>
+              <p>Please add <code>VITE_GOOGLE_MAPS_API_KEY</code> to your environment.</p>
+            </div>
+          ) : (
             <APIProvider apiKey={MAP_API_KEY}>
               <Map
                 mapId="citizendesk-admin-map"
@@ -321,8 +327,8 @@ export default function Admin() {
                 </div>
               )}
             </APIProvider>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </motion.div>
   );
