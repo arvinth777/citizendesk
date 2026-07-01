@@ -415,7 +415,7 @@ Return ONLY valid JSON in this exact format, no markdown:
       let html = fs.readFileSync(path.join(distPath, "index.html"), "utf8");
       
       // Inject runtime environment variables for the frontend
-      const envScript = `<script>window.ENV = { VITE_GOOGLE_MAPS_API_KEY: "${process.env.VITE_GOOGLE_MAPS_API_KEY || ''}" };</script>`;
+      const envScript = `<script>window.ENV = { VITE_GOOGLE_MAPS_API_KEY: "${process.env.VITE_GOOGLE_MAPS_API_KEY || 'AIzaSyCYyDSr72AiNp8hNhJ5dPxvpyp8MRisJCE'}" };</script>`;
       html = html.replace("</head>", `${envScript}</head>`);
       
       res.send(html);
